@@ -2,4 +2,4 @@
 
 ## Run
 
-    runhaskell Main.hs -i Pure
+    runhaskell Main.hs

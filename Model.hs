@@ -10,4 +10,4 @@ instance Show Cell where
 data World = World(Borders, [[Cell]])
 instance Show World where
   show (World (_, cellMatrix)) =
-    unlines $ map (\cellArray -> "\n" ++ (show cellArray)) cellMatrix
+    unlines $ map (\cellArray -> show cellArray) cellMatrix
