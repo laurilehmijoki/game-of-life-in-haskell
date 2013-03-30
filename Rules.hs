@@ -5,19 +5,19 @@ import qualified Model as M
 
 rules = [reproductionRule, overcrowdingRule, underpopulationRule]
 
-reproductionRule cellMatrix aliveCell@(M.AliveCell(_)) = Nothing
+reproductionRule cellMatrix (M.AliveCell(_)) = Nothing
 reproductionRule cellMatrix emptyCell@(M.EmptyCell(point)) =
   if (countNeighbours emptyCell isAlive cellMatrix) == 3
     then Just $ M.AliveCell point -- a new cell
     else Nothing
 
-overcrowdingRule cellMatrix emptyCell@(M.EmptyCell(_)) = Nothing
+overcrowdingRule cellMatrix (M.EmptyCell(_)) = Nothing
 overcrowdingRule cellMatrix aliveCell@(M.AliveCell(point)) =
   if (countNeighbours aliveCell isAlive cellMatrix) > 3
     then Just $ M.EmptyCell point -- the cell dies
     else Nothing
 
-underpopulationRule cellMatrix emptyCell@(M.EmptyCell(_)) = Nothing
+underpopulationRule cellMatrix (M.EmptyCell(_)) = Nothing
 underpopulationRule cellMatrix aliveCell@(M.AliveCell(point)) =
   if (countNeighbours aliveCell isAlive cellMatrix) < 2
     then Just $ M.EmptyCell point -- the cell dies
@@ -45,5 +45,5 @@ isNeighbour x y cell =
 point (M.EmptyCell(pt)) = pt
 point (M.AliveCell(pt)) = pt
 
-isAlive (M.AliveCell(_))      = True
+isAlive (M.AliveCell(_)) = True
 isAlive (M.EmptyCell(_)) = False
