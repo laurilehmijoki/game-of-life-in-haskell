@@ -10,9 +10,17 @@ nextGeneration cellMatrix = map playGameOfLife cellMatrix
   where
     playGameOfLife cellArray = map applyRules cellArray
     applyRules cell =
-      let maybeChange = change cell
-      in if isJust maybeChange then fromJust maybeChange else cell
-    change cell = R.reproductionRule cellMatrix cell
+      let maybeChange = newCellValue cell cellMatrix
+      in maybe cell id maybeChange
+
+newCellValue cell cellMatrix = applyRules
+  where
+    applyRule cell rule = rule cellMatrix cell
+    applyRules =
+      let changes = filter isJust $ map (applyRule cell) [R.reproductionRule]
+      in if length changes > 1
+           then error "Only one rule may apply to a cell"
+           else if null changes then Nothing else head changes
 
 createWorld rectangle@(M.Rectangle (width, height)) randomGen =
   M.World(rectangle, map createCellMatrix xs)
