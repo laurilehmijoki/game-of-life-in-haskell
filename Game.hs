@@ -1,12 +1,18 @@
 module Game(nextGeneration, createWorld) where
 
+import Debug.Trace(trace)
 import System.Random(randomR, StdGen)
+import Data.Maybe
 import qualified Model as M
 import qualified Rules as R
 
 nextGeneration cellMatrix = map playGameOfLife cellMatrix
   where
-    playGameOfLife cellArray = map (R.reproductionRule cellMatrix) cellArray
+    playGameOfLife cellArray = map applyRules cellArray
+    applyRules cell =
+      let maybeChange = change cell
+      in if isJust maybeChange then fromJust maybeChange else cell
+    change cell = R.reproductionRule cellMatrix cell
 
 createWorld rectangle@(M.Rectangle (width, height)) randomGen =
   M.World(rectangle, map createCellMatrix xs)

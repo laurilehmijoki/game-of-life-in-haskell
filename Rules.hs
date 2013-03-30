@@ -3,11 +3,11 @@ module Rules(reproductionRule) where
 import Debug.Trace(trace)
 import qualified Model as M
 
-reproductionRule cellMatrix aliveCell@(M.AliveCell(_)) = aliveCell
+reproductionRule cellMatrix aliveCell@(M.AliveCell(_)) = Just aliveCell
 reproductionRule cellMatrix emptyCell@(M.EmptyCell(point)) =
   if (countNeighbours emptyCell isAlive cellMatrix) == 3
-    then M.AliveCell(point)
-    else emptyCell
+    then Just $ M.AliveCell point
+    else Nothing
 
 countNeighbours cell cellState cellMatrix =
   length $ filter cellState $ neighbours (point cell) cellMatrix
