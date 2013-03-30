@@ -7,11 +7,11 @@ import qualified Model as M
 nextGeneration cellMatrix = map playGameOfLife cellMatrix
   where
     playGameOfLife cellArray = map maybeReproduce cellArray
-    maybeReproduce life@(M.Life(_)) = life
-    maybeReproduce emptiness@(M.Emptiness(point)) =
-      if (countNeighbours emptiness isAlive cellMatrix) == 3
-        then M.Life(point)
-        else emptiness
+    maybeReproduce aliveCell@(M.AliveCell(_)) = aliveCell
+    maybeReproduce emptyCell@(M.EmptyCell(point)) =
+      if (countNeighbours emptyCell isAlive cellMatrix) == 3
+        then M.AliveCell(point)
+        else emptyCell
 
 countNeighbours cell cellState cellMatrix =
   length $ filter cellState $ neighbours (point cell) cellMatrix
@@ -32,11 +32,11 @@ isNeighbour x y cell =
     minY = min y y2
     (M.Point(y2, x2)) = point cell
 
-point (M.Emptiness(pt)) = pt
-point (M.Life(pt)) = pt
+point (M.EmptyCell(pt)) = pt
+point (M.AliveCell(pt)) = pt
 
-isAlive (M.Life(_))      = True
-isAlive (M.Emptiness(_)) = False
+isAlive (M.AliveCell(_))      = True
+isAlive (M.EmptyCell(_)) = False
 
 createWorld rectangle@(M.Rectangle (width, height)) randomGen =
   M.World(rectangle, map createCellMatrix xs)
@@ -45,7 +45,7 @@ createWorld rectangle@(M.Rectangle (width, height)) randomGen =
     createCellMatrix x = [createCell x y | y <- [0..height]]
     createCell x y =
       if createLiveCell x y
-        then M.Life(M.Point(x, y))
-        else M.Emptiness(M.Point(x, y))
+        then M.AliveCell(M.Point(x, y))
+        else M.EmptyCell(M.Point(x, y))
     createLiveCell x y = x `mod` randNumber == 1
     (randNumber, _) = randomR (1,10) randomGen :: (Int, StdGen)

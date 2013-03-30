@@ -6,10 +6,10 @@ data Point = Point(Int, Int) -- y, x
 instance Show Point where
   show (Point(y, x)) = "(" ++ show x ++ "," ++ show y ++ ")"
 
-data Cell = Life(Point) | Emptiness(Point)
+data Cell = AliveCell(Point) | EmptyCell(Point)
 instance Show Cell where
-  show (Emptiness(Point(y, x))) = " "
-  show (Life(_))      = "O"
+  show (EmptyCell(Point(y, x))) = " "
+  show (AliveCell(_))      = "O"
 
 data World = World(Borders, [[Cell]])
 instance Show World where
