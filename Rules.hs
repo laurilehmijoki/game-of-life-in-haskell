@@ -1,12 +1,26 @@
-module Rules(reproductionRule) where
+module Rules(rules) where
 
 import Debug.Trace(trace)
 import qualified Model as M
 
-reproductionRule cellMatrix aliveCell@(M.AliveCell(_)) = Just aliveCell
+rules = [reproductionRule, overcrowdingRule, underpopulationRule]
+
+reproductionRule cellMatrix aliveCell@(M.AliveCell(_)) = Nothing
 reproductionRule cellMatrix emptyCell@(M.EmptyCell(point)) =
   if (countNeighbours emptyCell isAlive cellMatrix) == 3
-    then Just $ M.AliveCell point
+    then Just $ M.AliveCell point -- a new cell
+    else Nothing
+
+overcrowdingRule cellMatrix emptyCell@(M.EmptyCell(_)) = Nothing
+overcrowdingRule cellMatrix aliveCell@(M.AliveCell(point)) =
+  if (countNeighbours aliveCell isAlive cellMatrix) > 3
+    then Just $ M.EmptyCell point -- the cell dies
+    else Nothing
+
+underpopulationRule cellMatrix emptyCell@(M.EmptyCell(_)) = Nothing
+underpopulationRule cellMatrix aliveCell@(M.AliveCell(point)) =
+  if (countNeighbours aliveCell isAlive cellMatrix) < 2
+    then Just $ M.EmptyCell point -- the cell dies
     else Nothing
 
 countNeighbours cell cellState cellMatrix =

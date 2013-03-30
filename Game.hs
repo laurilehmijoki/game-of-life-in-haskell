@@ -17,7 +17,7 @@ newCellValue cell cellMatrix = applyRules
   where
     applyRule cell rule = rule cellMatrix cell
     applyRules =
-      let changes = filter isJust $ map (applyRule cell) [R.reproductionRule]
+      let changes = filter isJust $ map (applyRule cell) R.rules
       in if length changes > 1
            then error "Only one rule may apply to a cell"
            else if null changes then Nothing else head changes
