@@ -5,6 +5,7 @@ import qualified Game as G
 
 main = do
   gen <- getStdGen
+  putStrLn "Press <enter> for next generation. (Press q+<enter> to quit.)"
   waitForNextTick (world gen)
   where
     world gen = G.createWorld (M.Rectangle(16, 16)) gen
